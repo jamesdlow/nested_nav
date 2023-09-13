@@ -8,7 +8,7 @@ class NestedScreenRoutes {
 }
 
 class NestedScreen extends StatelessWidget {
-  NestedScreen({this.navigatorKey, Key key}) : super(key: key);
+  NestedScreen({required this.navigatorKey, Key? key}) : super(key: key);
   final GlobalKey<NavigatorState> navigatorKey;
 
   /// Will be used to navigate
@@ -16,14 +16,14 @@ class NestedScreen extends StatelessWidget {
   void _push(BuildContext context, String name) {
     // Navigator.of(navigatorKey.currentContext).push(
     //
-    BuildContext _desiredContext;
+    BuildContext? _desiredContext;
 
     if (name == 'Page 1') {
       _desiredContext = navigatorKey.currentContext;
     } else {
       _desiredContext = NavigatorKeys.navigatorKeyMain.currentContext;
     }
-    Navigator.of(_desiredContext).push(
+    Navigator.of(_desiredContext ?? context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
           backgroundColor: Colors.grey[700],
@@ -91,7 +91,8 @@ class NestedScreen extends StatelessWidget {
         onGenerateRoute: (routeSettings) {
           /// Generate the route we want
           return MaterialPageRoute(
-              builder: (context) => routeBuilders[routeSettings.name](context));
+              builder: (context) => routeBuilders[routeSettings.name]?.call(context) ?? Container()
+          );
         },
       ),
     );
